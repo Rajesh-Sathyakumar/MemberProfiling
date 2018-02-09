@@ -11,6 +11,7 @@
     {
         sessionUser = "Guest";
     }
+
 }
 
 <!DOCTYPE html>
@@ -121,13 +122,31 @@ desired effect
                         </a>
                         <ul class="dropdown-menu">
 
+                            <li class="user-body">
+                                <div class="row">
+                                    <div class="col-xs-12 text-center">
+                                            <i class="fa  fa-clock-o"></i>  Tool Last Refresh Date: <span id="lastRefreshDate"> 
+                                                @if (Session["refreshDate"] != null)
+                                                {
+                                                    DateTime dt = (DateTime)Session["refreshDate"];
+                                                    <text> @dt.ToShortDateString() </text>
+                                                }
+                                                else
+                                                {
+                                                    <text> N/A </text>
+                                                }
+                                        </span>
+                                    </div>
+                                </div>
+                            </li>
+
                             @if ( Session?["isAdmin"]!=null && (int)Session["isAdmin"] == 1)
                             {
                                 <li class="user-body">
                                     <div class="row">
                                         <div class="col-xs-12 text-center">
                                             <a href="@Url.Content("~/THI_AnalysisFeedback/EditUserPermission")">
-                                                <i class="fa fa-users text-aqua"></i> User Management
+                                                <i class="fa fa-users text-aqua"></i>  User Management
                                             </a>
                                         </div>
                                     </div>
@@ -332,6 +351,17 @@ fixed layout. -->
         }
     });
 
+    var sourceSysTable = $('#sourceSysTable').DataTable({
+        "searching": false,
+        "ordering": false,
+        "paging": false,
+        "lengthChange": false,
+        "bInfo": false,
+        "oLanguage": {
+            "sEmptyTable": "<center><b>No Data to display</b></center>"
+        }
+    });
+
     var minesweeperTable = $('#MinesweeperTable').DataTable({
         "searching": false,
         "ordering": false,
@@ -461,11 +491,26 @@ fixed layout. -->
     disableComments("DAS_Findings");
     disableComments("SSA_Findings");
 
-    $("#createSection #Project option[value='1']").remove();
-    $("#indexSection #Project option[value='0']").remove();
-    $("#DischargeVolumes #Project option[value='1']").remove();
-    $("#MemberTHIScores #Project option[value='1']").remove();
-
+    //$("#createSection #Project option[value='1']").remove();
+    //$("#createSection #Project")
+    //     .prepend($("<option></option>")
+    //                .attr("value", "0")
+    //                .text("None Selected").attr("selected", "selected"));
+    //$("#indexSection #Project option[value='0']").remove();
+    //$("#indexSection #Project")
+    //     .prepend($("<option></option>")
+    //                .attr("value", "1")
+    //                .text("All Selected").attr("selected", "selected"));
+    //$("#DischargeVolumes #Project option[value='1']").remove();
+    //$("#DischargeVolumes #Project")
+    //     .prepend($("<option></option>")
+    //                .attr("value", "0")
+    //                .text("None Selected").attr("selected", "selected"));
+    //$("#MemberTHIScores #Project option[value='1']").remove();
+    //$("#MemberTHIScores #Project")
+    //     .prepend($("<option></option>")
+    //                .attr("value", "0")
+    //                .text("None Selected").attr("selected", "selected"));
 
     $('#DischargeVolumes #wiki-help').click(function () {
         window.location.href = "@Url.Content("https://wiki.advisory.com/display/CPM/THI+Analysis+Tool")";
@@ -473,15 +518,22 @@ fixed layout. -->
 
     $('#DischargeVolumes #Project').change(function () {
 
-        var selectedProj = $(this).find('option:selected').attr('value');
+        var selectedProj = $('#DischargeVolumes #Project').find('option:selected').attr('value');
         var $btn = $('#DischargeVolumes #volumeParamSubmit');
 
         if (selectedProj !== 0) {
 
             var loadingId = "HospitalSelection";
+            var oppeLoadingId = "OppeLoader";
+            var sourceSystemLoadingId = "SourceSystemLoader";
+            var GrouperInfoLoadingId = "GrouperInfoLoader";
+
             $btn.removeAttr('disabled');
             $('#facilitySelection').removeAttr('disabled');
             $('#volumeParameters').append(renderingLoadingBlock(loadingId));
+            $('#OppeSection').append(renderingLoadingBlock(oppeLoadingId));
+            $('#SourceSystemSection').append(renderingLoadingBlock(sourceSystemLoadingId));
+            $('#GrouperSection').append(renderingLoadingBlock(GrouperInfoLoadingId));
 
             var filterProjectJsonReq = {
                 "url": "@Url.Content("~/THI_AnalysisFeedback/FilterHospitalsByProject")",
@@ -496,6 +548,10 @@ fixed layout. -->
                     var compiledHospitalTemplate = Handlebars.compile(rawHospitalTemplate);
                     $('#projectHospitals').html(compiledHospitalTemplate(data));
                     $('#' + loadingId).remove();
+                    $('#' + oppeLoadingId).remove();
+                    $('#' + sourceSystemLoadingId).remove();
+                    $('#' + GrouperInfoLoadingId).remove();
+                    
                     if ($('#DischargeVolumes #facilitySelection').find('option:selected').val() === 0) {
                         $btn.attr('disabled', 'disabled');
                     }
@@ -511,8 +567,10 @@ fixed layout. -->
                 },
                 "data": "{ \"project\": " + selectedProj + " }",
                 "dataType": "JSON",
-                "success": function (data) {
+                "success": function (response) {
 
+                    var data = response.dataInfo;
+                    var sourceSystem = response.sourceSystemInfo;
                     var grouper3MInfo;
                     var runAprdrgInfo;
                     var aprdrgAggregate;
@@ -558,6 +616,21 @@ fixed layout. -->
                         customOppeCount = "NA";
                     }
 
+                    
+
+                    var rawVolumeTemplate = $('#sourceSystemTableTemplate').html();
+                    var compiledVolumeTemplate = Handlebars.compile(rawVolumeTemplate);
+                    $('#sourceSystemTable').html(compiledVolumeTemplate(sourceSystem));
+
+                    if (!sourceSystem.length) {
+                        sourceSysTable.clear().draw();
+                    }
+
+
+                    var selectedProjName = $('#DischargeVolumes #Project').find('option:selected').html();
+
+                    $('#sourceSystemCount').html(sourceSystem.length);
+                    $('#SourceSystemProj').html(selectedProjName);
                     $('#DischargeVolumes #3mGrouper').html(grouper3MInfo);
                     $('#DischargeVolumes #runAPRDRG').html(runAprdrgInfo);
                     $('#DischargeVolumes #customOppeCount').html(customOppeCount);
@@ -1244,6 +1317,7 @@ fixed layout. -->
         <td>{{issuename}}</td>
         <td>{{issuecount}}</td>
         <td>{{dischargecount}}</td>
+        <td>{{calculatePercentage issuecount dischargecount}}</td>
         <td>{{formatTHIScores monthlybenchmark}}</td>
     </tr>
     {{/each}}
@@ -1299,9 +1373,10 @@ fixed layout. -->
             <td class="{{formatColor C_USE_Compass_Connect_CC}}" title="WHITE: Not Factored to THI Score">{{formatTHIScoresToInt C_USE_Compass_Connect}}</td>
             <td class="{{formatColor C_Data_Elements_Present_CC}}" title="RED: 0.8 AND BELOW, YELLOW: 0.801 TO 0.85, GREEN: 0.851 AND ABOVE">{{formatTHIScores C_Data_Elements_Present}}</td>
             <td class="{{formatColor C_CriticalInternalDiagnostics_CC}}" title="WHITE: Not Factored to THI Score">{{formatTHIScores C_CriticalInternalDiagnostics}}</td>
+            <td class="{{formatColor C_HistoricalReloadResult_CC}}" title="RED: 3 AND ABOVE, YELLOW: 2 , GREEN: 1 AND BELOW">{{formatTHIScores C_HistoricalReloadResult}}</td>
 
         </tr>
-    </script>
+</script>
 
 <script id="memberContractInfoTemplate" type="text/x-handlebars-template">
         <tr role="row">
@@ -1337,6 +1412,16 @@ fixed layout. -->
         </tr>
     </script>
 
+
+    <script id="sourceSystemTableTemplate" type="text/x-handlebars-template">
+        {{#each this}}
+        <tr role="row">
+            <td>{{DATASET}}</td>
+            <td>{{SOURCESYSTEM}}</td>
+        </tr>
+        {{/each}}
+    </script>
+
 <script>
 
     function convertDate(date) {
@@ -1359,6 +1444,14 @@ fixed layout. -->
         }
     }
 
+    Handlebars.registerHelper('calculatePercentage',
+        function (issuecount, totalcount) {
+            if (totalcount === null || totalcount === undefined || issuecount === undefined)
+                return 'N/A'
+            else
+            return ((issuecount / totalcount) * 100).toFixed(2) + ' %';
+        });
+
     Handlebars.registerHelper('monthConvert',
         function(month) {
             return (monthNames[month - 1]);
@@ -1370,7 +1463,7 @@ fixed layout. -->
 
     Handlebars.registerHelper('formatTHIScores',
         function(number) {
-            if (number === -99999.0) {
+            if (number === -99999.0 || number === null) {
                 return 'N/A';
             } else {
                 return (number.toFixed(2));

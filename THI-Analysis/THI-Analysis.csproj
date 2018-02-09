@@ -282,6 +282,9 @@
     <Compile Include="Models\MemberDataElements_OPPE.cs">
       <DependentUpon>THI_AnalysisFeedback.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\MEMBERSOURCESYSTEM.cs">
+      <DependentUpon>THI_AnalysisFeedback.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\MemberSupportTicket.cs">
       <DependentUpon>THI_AnalysisFeedback.tt</DependentUpon>
     </Compile>

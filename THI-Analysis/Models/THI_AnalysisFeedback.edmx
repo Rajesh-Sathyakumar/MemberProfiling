@@ -82,6 +82,15 @@
           <Property Name="IP_COUNT" Type="int" />
           <Property Name="OP_COUNT" Type="int" />
         </EntityType>
+        <EntityType Name="MEMBERSOURCESYSTEM">
+          <Key>
+            <PropertyRef Name="MEMBERSOURCESYSTEMKEY" />
+          </Key>
+          <Property Name="MEMBERSOURCESYSTEMKEY" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PROJECTKEY" Type="int" />
+          <Property Name="DATASET" Type="varchar" MaxLength="200" />
+          <Property Name="SOURCESYSTEM" Type="varchar(max)" />
+        </EntityType>
         <EntityType Name="MemberSupportTickets">
           <Key>
             <PropertyRef Name="MemberSupportTicketsKey" />
@@ -248,6 +257,7 @@ warning 6002: The table/view 'CCCOperations.thi.CCCTHIScoreColor' does not have 
             <PropertyRef Name="#USE_Compass_Connect_CC" />
             <PropertyRef Name="#Data_Elements_Present_CC" />
             <PropertyRef Name="#CriticalInternalDiagnostics_CC" />
+            <PropertyRef Name="#HistoricalReloadResult_CC" />
             <PropertyRef Name="THISCORE_CC" />
           </Key>
           <Property Name="ProjectKey" Type="int" Nullable="false" />
@@ -274,6 +284,8 @@ warning 6002: The table/view 'CCCOperations.thi.CCCTHIScoreColor' does not have 
           <Property Name="#Data_Elements_Present_CC" Type="varchar" MaxLength="6" Nullable="false" />
           <Property Name="#CriticalInternalDiagnostics" Type="float" />
           <Property Name="#CriticalInternalDiagnostics_CC" Type="varchar" MaxLength="3" Nullable="false" />
+          <Property Name="#HistoricalReloadResult" Type="float" />
+          <Property Name="#HistoricalReloadResult_CC" Type="varchar" MaxLength="6" Nullable="false" />
           <Property Name="THIScore" Type="float" />
           <Property Name="THISCORE_CC" Type="varchar" MaxLength="6" Nullable="false" />
         </EntityType>
@@ -296,6 +308,7 @@ warning 6002: The table/view 'CCCOperations.thi.CCCTHIScores' does not have a pr
           <Property Name="#USE_Compass_Connect" Type="float" />
           <Property Name="#Data_Elements_Present" Type="float" />
           <Property Name="#CriticalInternalDiagnostics" Type="float" />
+          <Property Name="#HistoricalReloadResult" Type="float" />
           <Property Name="Frequency" Type="varchar(max)" />
           <Property Name="THIScore" Type="float" />
           <Property Name="ProjectPhase" Type="varchar(max)" />
@@ -570,6 +583,18 @@ warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_SALESFORCEPROJECTS_SOURCESYSTEM_PROJECT">
+          <End Role="SalesforceProjects" Type="Self.SalesforceProjects" Multiplicity="0..1" />
+          <End Role="MEMBERSOURCESYSTEM" Type="Self.MEMBERSOURCESYSTEM" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SalesforceProjects">
+              <PropertyRef Name="ProjectKey" />
+            </Principal>
+            <Dependent Role="MEMBERSOURCESYSTEM">
+              <PropertyRef Name="PROJECTKEY" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SSA_Findings_SSA_FindingsKey">
           <End Role="SSA_Findings" Type="Self.SSA_Findings" Multiplicity="1" />
           <End Role="THI_AnalysisFeedback" Type="Self.THI_AnalysisFeedback" Multiplicity="*" />
@@ -622,6 +647,7 @@ warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a
           <EntitySet Name="DataLag" EntityType="Self.DataLag" Schema="thi" store:Type="Tables" />
           <EntitySet Name="DataLoadTimeliness" EntityType="Self.DataLoadTimeliness" Schema="thi" store:Type="Tables" />
           <EntitySet Name="DischargeVolumes" EntityType="Self.DischargeVolumes" Schema="thi" store:Type="Tables" />
+          <EntitySet Name="MEMBERSOURCESYSTEM" EntityType="Self.MEMBERSOURCESYSTEM" Schema="thi" store:Type="Tables" />
           <EntitySet Name="MemberSupportTickets" EntityType="Self.MemberSupportTickets" Schema="thi" store:Type="Tables" />
           <EntitySet Name="Minesweeper" EntityType="Self.Minesweeper" Schema="thi" store:Type="Tables" />
           <EntitySet Name="Products" EntityType="Self.Products" Schema="thi" store:Type="Tables" />
@@ -674,6 +700,8 @@ warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a
     [CCCTHIScoreColor].[#Data_Elements_Present_CC] AS [#Data_Elements_Present_CC], 
     [CCCTHIScoreColor].[#CriticalInternalDiagnostics] AS [#CriticalInternalDiagnostics], 
     [CCCTHIScoreColor].[#CriticalInternalDiagnostics_CC] AS [#CriticalInternalDiagnostics_CC], 
+    [CCCTHIScoreColor].[#HistoricalReloadResult] AS [#HistoricalReloadResult], 
+    [CCCTHIScoreColor].[#HistoricalReloadResult_CC] AS [#HistoricalReloadResult_CC], 
     [CCCTHIScoreColor].[THIScore] AS [THIScore], 
     [CCCTHIScoreColor].[THISCORE_CC] AS [THISCORE_CC]
     FROM [thi].[CCCTHIScoreColor] AS [CCCTHIScoreColor]</DefiningQuery>
@@ -693,6 +721,7 @@ warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a
     [CCCTHIScores].[#USE_Compass_Connect] AS [#USE_Compass_Connect], 
     [CCCTHIScores].[#Data_Elements_Present] AS [#Data_Elements_Present], 
     [CCCTHIScores].[#CriticalInternalDiagnostics] AS [#CriticalInternalDiagnostics], 
+    [CCCTHIScores].[#HistoricalReloadResult] AS [#HistoricalReloadResult], 
     [CCCTHIScores].[Frequency] AS [Frequency], 
     [CCCTHIScores].[THIScore] AS [THIScore], 
     [CCCTHIScores].[ProjectPhase] AS [ProjectPhase]
@@ -824,6 +853,10 @@ warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a
             <End Role="SalesforceProjects" EntitySet="SalesforceProjects" />
             <End Role="ProjectHospitals" EntitySet="ProjectHospitals" />
           </AssociationSet>
+          <AssociationSet Name="FK_SALESFORCEPROJECTS_SOURCESYSTEM_PROJECT" Association="Self.FK_SALESFORCEPROJECTS_SOURCESYSTEM_PROJECT">
+            <End Role="SalesforceProjects" EntitySet="SalesforceProjects" />
+            <End Role="MEMBERSOURCESYSTEM" EntitySet="MEMBERSOURCESYSTEM" />
+          </AssociationSet>
           <AssociationSet Name="FK_SSA_Findings_SSA_FindingsKey" Association="Self.FK_SSA_Findings_SSA_FindingsKey">
             <End Role="SSA_Findings" EntitySet="SSA_Findings" />
             <End Role="THI_AnalysisFeedback" EntitySet="THI_AnalysisFeedback" />
@@ -930,6 +963,16 @@ warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a
           <Property Name="OP_COUNT" Type="Int32" />
           <NavigationProperty Name="ProjectHospital1" Relationship="Self.FK_ProjectHospital_ProjectHospitals_ProjectHospitalKey" FromRole="DischargeVolumes" ToRole="ProjectHospitals" />
         </EntityType>
+        <EntityType Name="MEMBERSOURCESYSTEM">
+          <Key>
+            <PropertyRef Name="MEMBERSOURCESYSTEMKEY" />
+          </Key>
+          <Property Name="MEMBERSOURCESYSTEMKEY" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PROJECTKEY" Type="Int32" />
+          <Property Name="DATASET" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="SOURCESYSTEM" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="SalesforceProject" Relationship="Self.FK_SALESFORCEPROJECTS_SOURCESYSTEM_PROJECT" FromRole="MEMBERSOURCESYSTEM" ToRole="SalesforceProjects" />
+        </EntityType>
         <EntityType Name="MemberSupportTicket">
           <Key>
             <PropertyRef Name="MemberSupportTicketsKey" />
@@ -982,6 +1025,7 @@ warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a
           <Property Name="ProjectID" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="ProjectPhase" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="CustomOPPEinfoes" Relationship="Self.FK_CustomOPPEInfo_SalesforceProjects_ProjectKey" FromRole="SalesforceProjects" ToRole="CustomOPPEinfo" />
+          <NavigationProperty Name="MEMBERSOURCESYSTEMs" Relationship="Self.FK_SALESFORCEPROJECTS_SOURCESYSTEM_PROJECT" FromRole="SalesforceProjects" ToRole="MEMBERSOURCESYSTEM" />
           <NavigationProperty Name="ProjectHospitals" Relationship="Self.FK_ProjectHospitals_SalesforceProjects_ProjectKey" FromRole="SalesforceProjects" ToRole="ProjectHospitals" />
           <NavigationProperty Name="THI_AnalysisFeedback" Relationship="Self.FK_Project_ProjectKey" FromRole="SalesforceProjects" ToRole="THI_AnalysisFeedback" />
         </EntityType>
@@ -1119,6 +1163,7 @@ warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a
             <PropertyRef Name="C_USE_Compass_Connect_CC" />
             <PropertyRef Name="C_Data_Elements_Present_CC" />
             <PropertyRef Name="C_CriticalInternalDiagnostics_CC" />
+            <PropertyRef Name="C_HistoricalReloadResult_CC" />
             <PropertyRef Name="THISCORE_CC" />
           </Key>
           <Property Name="ProjectKey" Type="Int32" Nullable="false" />
@@ -1145,6 +1190,8 @@ warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a
           <Property Name="C_Data_Elements_Present_CC" Type="String" MaxLength="6" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="C_CriticalInternalDiagnostics" Type="Double" />
           <Property Name="C_CriticalInternalDiagnostics_CC" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="C_HistoricalReloadResult" Type="Double" />
+          <Property Name="C_HistoricalReloadResult_CC" Type="String" MaxLength="6" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="THIScore" Type="Double" />
           <Property Name="THISCORE_CC" Type="String" MaxLength="6" FixedLength="false" Unicode="false" Nullable="false" />
         </EntityType>
@@ -1165,6 +1212,7 @@ warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a
           <Property Name="C_USE_Compass_Connect" Type="Double" />
           <Property Name="C_Data_Elements_Present" Type="Double" />
           <Property Name="C_CriticalInternalDiagnostics" Type="Double" />
+          <Property Name="C_HistoricalReloadResult" Type="Double" />
           <Property Name="Frequency" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="THIScore" Type="Double" />
           <Property Name="ProjectPhase" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
@@ -1357,6 +1405,18 @@ warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_SALESFORCEPROJECTS_SOURCESYSTEM_PROJECT">
+          <End Role="SalesforceProjects" Type="Self.SalesforceProject" Multiplicity="0..1" />
+          <End Role="MEMBERSOURCESYSTEM" Type="Self.MEMBERSOURCESYSTEM" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SalesforceProjects">
+              <PropertyRef Name="ProjectKey" />
+            </Principal>
+            <Dependent Role="MEMBERSOURCESYSTEM">
+              <PropertyRef Name="PROJECTKEY" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_MemberSupportTickets_MemberSupportTicketsKey">
           <End Role="MemberSupportTickets" Type="Self.MemberSupportTicket" Multiplicity="1" />
           <End Role="THI_AnalysisFeedback" Type="Self.THI_AnalysisFeedback" Multiplicity="*" />
@@ -1476,6 +1536,7 @@ warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a
           <EntitySet Name="DataLags" EntityType="Self.DataLag" />
           <EntitySet Name="DataLoadTimelinesses" EntityType="Self.DataLoadTimeliness" />
           <EntitySet Name="DischargeVolumes" EntityType="Self.DischargeVolume" />
+          <EntitySet Name="MEMBERSOURCESYSTEMs" EntityType="Self.MEMBERSOURCESYSTEM" />
           <EntitySet Name="MemberSupportTickets" EntityType="Self.MemberSupportTicket" />
           <EntitySet Name="Minesweepers" EntityType="Self.Minesweeper" />
           <EntitySet Name="Products" EntityType="Self.Product" />
@@ -1535,6 +1596,10 @@ warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a
           <AssociationSet Name="FK_ProjectHospital_ProjectHospitals_ProjectHospitalKey" Association="Self.FK_ProjectHospital_ProjectHospitals_ProjectHospitalKey">
             <End Role="ProjectHospitals" EntitySet="ProjectHospitals" />
             <End Role="DischargeVolumes" EntitySet="DischargeVolumes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SALESFORCEPROJECTS_SOURCESYSTEM_PROJECT" Association="Self.FK_SALESFORCEPROJECTS_SOURCESYSTEM_PROJECT">
+            <End Role="SalesforceProjects" EntitySet="SalesforceProjects" />
+            <End Role="MEMBERSOURCESYSTEM" EntitySet="MEMBERSOURCESYSTEMs" />
           </AssociationSet>
           <AssociationSet Name="FK_MemberSupportTickets_MemberSupportTicketsKey" Association="Self.FK_MemberSupportTickets_MemberSupportTicketsKey">
             <End Role="MemberSupportTickets" EntitySet="MemberSupportTickets" />
@@ -1677,6 +1742,16 @@ warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a
                 <ScalarProperty Name="Month" ColumnName="Month" />
                 <ScalarProperty Name="IP_COUNT" ColumnName="IP_COUNT" />
                 <ScalarProperty Name="OP_COUNT" ColumnName="OP_COUNT" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MEMBERSOURCESYSTEMs">
+            <EntityTypeMapping TypeName="CCCOperationsModel.MEMBERSOURCESYSTEM">
+              <MappingFragment StoreEntitySet="MEMBERSOURCESYSTEM">
+                <ScalarProperty Name="MEMBERSOURCESYSTEMKEY" ColumnName="MEMBERSOURCESYSTEMKEY" />
+                <ScalarProperty Name="PROJECTKEY" ColumnName="PROJECTKEY" />
+                <ScalarProperty Name="DATASET" ColumnName="DATASET" />
+                <ScalarProperty Name="SOURCESYSTEM" ColumnName="SOURCESYSTEM" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1868,6 +1943,8 @@ warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a
                 <ScalarProperty Name="C_Data_Elements_Present_CC" ColumnName="#Data_Elements_Present_CC" />
                 <ScalarProperty Name="C_CriticalInternalDiagnostics" ColumnName="#CriticalInternalDiagnostics" />
                 <ScalarProperty Name="C_CriticalInternalDiagnostics_CC" ColumnName="#CriticalInternalDiagnostics_CC" />
+                <ScalarProperty Name="C_HistoricalReloadResult" ColumnName="#HistoricalReloadResult" />
+                <ScalarProperty Name="C_HistoricalReloadResult_CC" ColumnName="#HistoricalReloadResult_CC" />
                 <ScalarProperty Name="THIScore" ColumnName="THIScore" />
                 <ScalarProperty Name="THISCORE_CC" ColumnName="THISCORE_CC" />
               </MappingFragment>
@@ -1889,6 +1966,7 @@ warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a
                 <ScalarProperty Name="C_USE_Compass_Connect" ColumnName="#USE_Compass_Connect" />
                 <ScalarProperty Name="C_Data_Elements_Present" ColumnName="#Data_Elements_Present" />
                 <ScalarProperty Name="C_CriticalInternalDiagnostics" ColumnName="#CriticalInternalDiagnostics" />
+                <ScalarProperty Name="C_HistoricalReloadResult" ColumnName="#HistoricalReloadResult" />
                 <ScalarProperty Name="Frequency" ColumnName="Frequency" />
                 <ScalarProperty Name="THIScore" ColumnName="THIScore" />
                 <ScalarProperty Name="ProjectPhase" ColumnName="ProjectPhase" />

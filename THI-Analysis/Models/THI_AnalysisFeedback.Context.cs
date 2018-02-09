@@ -37,6 +37,7 @@ namespace THI_Analysis.Models
         public virtual DbSet<DataLag> DataLags { get; set; }
         public virtual DbSet<DataLoadTimeliness> DataLoadTimelinesses { get; set; }
         public virtual DbSet<DischargeVolume> DischargeVolumes { get; set; }
+        public virtual DbSet<MEMBERSOURCESYSTEM> MEMBERSOURCESYSTEMs { get; set; }
         public virtual DbSet<MemberSupportTicket> MemberSupportTickets { get; set; }
         public virtual DbSet<Minesweeper> Minesweepers { get; set; }
         public virtual DbSet<Product> Products { get; set; }

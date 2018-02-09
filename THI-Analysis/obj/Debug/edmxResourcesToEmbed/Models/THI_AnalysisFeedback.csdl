@@ -88,6 +88,16 @@
     <Property Name="OP_COUNT" Type="Int32" />
     <NavigationProperty Name="ProjectHospital1" Relationship="Self.FK_ProjectHospital_ProjectHospitals_ProjectHospitalKey" FromRole="DischargeVolumes" ToRole="ProjectHospitals" />
   </EntityType>
+  <EntityType Name="MEMBERSOURCESYSTEM">
+    <Key>
+      <PropertyRef Name="MEMBERSOURCESYSTEMKEY" />
+    </Key>
+    <Property Name="MEMBERSOURCESYSTEMKEY" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PROJECTKEY" Type="Int32" />
+    <Property Name="DATASET" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="SOURCESYSTEM" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="SalesforceProject" Relationship="Self.FK_SALESFORCEPROJECTS_SOURCESYSTEM_PROJECT" FromRole="MEMBERSOURCESYSTEM" ToRole="SalesforceProjects" />
+  </EntityType>
   <EntityType Name="MemberSupportTicket">
     <Key>
       <PropertyRef Name="MemberSupportTicketsKey" />
@@ -140,6 +150,7 @@
     <Property Name="ProjectID" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
     <Property Name="ProjectPhase" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="CustomOPPEinfoes" Relationship="Self.FK_CustomOPPEInfo_SalesforceProjects_ProjectKey" FromRole="SalesforceProjects" ToRole="CustomOPPEinfo" />
+    <NavigationProperty Name="MEMBERSOURCESYSTEMs" Relationship="Self.FK_SALESFORCEPROJECTS_SOURCESYSTEM_PROJECT" FromRole="SalesforceProjects" ToRole="MEMBERSOURCESYSTEM" />
     <NavigationProperty Name="ProjectHospitals" Relationship="Self.FK_ProjectHospitals_SalesforceProjects_ProjectKey" FromRole="SalesforceProjects" ToRole="ProjectHospitals" />
     <NavigationProperty Name="THI_AnalysisFeedback" Relationship="Self.FK_Project_ProjectKey" FromRole="SalesforceProjects" ToRole="THI_AnalysisFeedback" />
   </EntityType>
@@ -277,6 +288,7 @@
       <PropertyRef Name="C_USE_Compass_Connect_CC" />
       <PropertyRef Name="C_Data_Elements_Present_CC" />
       <PropertyRef Name="C_CriticalInternalDiagnostics_CC" />
+      <PropertyRef Name="C_HistoricalReloadResult_CC" />
       <PropertyRef Name="THISCORE_CC" />
     </Key>
     <Property Name="ProjectKey" Type="Int32" Nullable="false" />
@@ -303,6 +315,8 @@
     <Property Name="C_Data_Elements_Present_CC" Type="String" MaxLength="6" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="C_CriticalInternalDiagnostics" Type="Double" />
     <Property Name="C_CriticalInternalDiagnostics_CC" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="C_HistoricalReloadResult" Type="Double" />
+    <Property Name="C_HistoricalReloadResult_CC" Type="String" MaxLength="6" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="THIScore" Type="Double" />
     <Property Name="THISCORE_CC" Type="String" MaxLength="6" FixedLength="false" Unicode="false" Nullable="false" />
   </EntityType>
@@ -323,6 +337,7 @@
     <Property Name="C_USE_Compass_Connect" Type="Double" />
     <Property Name="C_Data_Elements_Present" Type="Double" />
     <Property Name="C_CriticalInternalDiagnostics" Type="Double" />
+    <Property Name="C_HistoricalReloadResult" Type="Double" />
     <Property Name="Frequency" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
     <Property Name="THIScore" Type="Double" />
     <Property Name="ProjectPhase" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
@@ -515,6 +530,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_SALESFORCEPROJECTS_SOURCESYSTEM_PROJECT">
+    <End Role="SalesforceProjects" Type="Self.SalesforceProject" Multiplicity="0..1" />
+    <End Role="MEMBERSOURCESYSTEM" Type="Self.MEMBERSOURCESYSTEM" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SalesforceProjects">
+        <PropertyRef Name="ProjectKey" />
+      </Principal>
+      <Dependent Role="MEMBERSOURCESYSTEM">
+        <PropertyRef Name="PROJECTKEY" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_MemberSupportTickets_MemberSupportTicketsKey">
     <End Role="MemberSupportTickets" Type="Self.MemberSupportTicket" Multiplicity="1" />
     <End Role="THI_AnalysisFeedback" Type="Self.THI_AnalysisFeedback" Multiplicity="*" />
@@ -634,6 +661,7 @@
     <EntitySet Name="DataLags" EntityType="Self.DataLag" />
     <EntitySet Name="DataLoadTimelinesses" EntityType="Self.DataLoadTimeliness" />
     <EntitySet Name="DischargeVolumes" EntityType="Self.DischargeVolume" />
+    <EntitySet Name="MEMBERSOURCESYSTEMs" EntityType="Self.MEMBERSOURCESYSTEM" />
     <EntitySet Name="MemberSupportTickets" EntityType="Self.MemberSupportTicket" />
     <EntitySet Name="Minesweepers" EntityType="Self.Minesweeper" />
     <EntitySet Name="Products" EntityType="Self.Product" />
@@ -693,6 +721,10 @@
     <AssociationSet Name="FK_ProjectHospital_ProjectHospitals_ProjectHospitalKey" Association="Self.FK_ProjectHospital_ProjectHospitals_ProjectHospitalKey">
       <End Role="ProjectHospitals" EntitySet="ProjectHospitals" />
       <End Role="DischargeVolumes" EntitySet="DischargeVolumes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SALESFORCEPROJECTS_SOURCESYSTEM_PROJECT" Association="Self.FK_SALESFORCEPROJECTS_SOURCESYSTEM_PROJECT">
+      <End Role="SalesforceProjects" EntitySet="SalesforceProjects" />
+      <End Role="MEMBERSOURCESYSTEM" EntitySet="MEMBERSOURCESYSTEMs" />
     </AssociationSet>
     <AssociationSet Name="FK_MemberSupportTickets_MemberSupportTicketsKey" Association="Self.FK_MemberSupportTickets_MemberSupportTicketsKey">
       <End Role="MemberSupportTickets" EntitySet="MemberSupportTickets" />

@@ -88,6 +88,16 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="MEMBERSOURCESYSTEMs">
+      <EntityTypeMapping TypeName="CCCOperationsModel.MEMBERSOURCESYSTEM">
+        <MappingFragment StoreEntitySet="MEMBERSOURCESYSTEM">
+          <ScalarProperty Name="MEMBERSOURCESYSTEMKEY" ColumnName="MEMBERSOURCESYSTEMKEY" />
+          <ScalarProperty Name="PROJECTKEY" ColumnName="PROJECTKEY" />
+          <ScalarProperty Name="DATASET" ColumnName="DATASET" />
+          <ScalarProperty Name="SOURCESYSTEM" ColumnName="SOURCESYSTEM" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="MemberSupportTickets">
       <EntityTypeMapping TypeName="CCCOperationsModel.MemberSupportTicket">
         <MappingFragment StoreEntitySet="MemberSupportTickets">
@@ -276,6 +286,8 @@
           <ScalarProperty Name="C_Data_Elements_Present_CC" ColumnName="#Data_Elements_Present_CC" />
           <ScalarProperty Name="C_CriticalInternalDiagnostics" ColumnName="#CriticalInternalDiagnostics" />
           <ScalarProperty Name="C_CriticalInternalDiagnostics_CC" ColumnName="#CriticalInternalDiagnostics_CC" />
+          <ScalarProperty Name="C_HistoricalReloadResult" ColumnName="#HistoricalReloadResult" />
+          <ScalarProperty Name="C_HistoricalReloadResult_CC" ColumnName="#HistoricalReloadResult_CC" />
           <ScalarProperty Name="THIScore" ColumnName="THIScore" />
           <ScalarProperty Name="THISCORE_CC" ColumnName="THISCORE_CC" />
         </MappingFragment>
@@ -297,6 +309,7 @@
           <ScalarProperty Name="C_USE_Compass_Connect" ColumnName="#USE_Compass_Connect" />
           <ScalarProperty Name="C_Data_Elements_Present" ColumnName="#Data_Elements_Present" />
           <ScalarProperty Name="C_CriticalInternalDiagnostics" ColumnName="#CriticalInternalDiagnostics" />
+          <ScalarProperty Name="C_HistoricalReloadResult" ColumnName="#HistoricalReloadResult" />
           <ScalarProperty Name="Frequency" ColumnName="Frequency" />
           <ScalarProperty Name="THIScore" ColumnName="THIScore" />
           <ScalarProperty Name="ProjectPhase" ColumnName="ProjectPhase" />

@@ -18,6 +18,7 @@ namespace THI_Analysis.Models
         public SalesforceProject()
         {
             this.CustomOPPEinfoes = new HashSet<CustomOPPEinfo>();
+            this.MEMBERSOURCESYSTEMs = new HashSet<MEMBERSOURCESYSTEM>();
             this.ProjectHospitals = new HashSet<ProjectHospital>();
             this.THI_AnalysisFeedback = new HashSet<THI_AnalysisFeedback>();
         }
@@ -38,6 +39,8 @@ namespace THI_Analysis.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CustomOPPEinfo> CustomOPPEinfoes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MEMBERSOURCESYSTEM> MEMBERSOURCESYSTEMs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProjectHospital> ProjectHospitals { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

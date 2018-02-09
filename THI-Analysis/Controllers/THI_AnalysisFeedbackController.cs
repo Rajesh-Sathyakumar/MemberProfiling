@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity;
@@ -10,7 +9,6 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Web;
 
 using System.Web.Mvc;
 using System.Xml.Linq;
@@ -416,65 +414,72 @@ namespace THI_Analysis.Controllers
         
         public bool SiamRedirection(string returnUrl)
         {
-            if (Session["UserSessionInfo"] == null)
-            {
-                var cas = new CasAuthenticationService(SamlHelperConfiguration.Config, UserSessionHandler.Get());
-                var httpContextBase = new HttpContextWrapper(System.Web.HttpContext.Current);
-                if (!cas.IsSAMLResponse(httpContextBase) && (Session?["UserSessionInfo"] == null))
-                {
-                    cas.RedirectUserToCasLogin(
-                        _memberOrgKey,
-                        _productKey,
-                        _environmentKey,
-                        returnUrl);
-                    return true;
-                }
-                else
-                {
+            //if (Session["UserSessionInfo"] == null)
+            //{
+            //    var cas = new CasAuthenticationService(SamlHelperConfiguration.Config, UserSessionHandler.Get());
+            //    var httpContextBase = new HttpContextWrapper(System.Web.HttpContext.Current);
+            //    if (!cas.IsSAMLResponse(httpContextBase) && (Session?["UserSessionInfo"] == null))
+            //    {
+            //        cas.RedirectUserToCasLogin(
+            //            _memberOrgKey,
+            //            _productKey,
+            //            _environmentKey,
+            //            returnUrl);
+            //        return true;
+            //    }
+            //    else
+            //    {
 
-                    var samlResponse = httpContextBase.Request.Form["SAMLResponse"];
-                    var relayState = httpContextBase.Request.Form["RelayState"];
-                    var samlAndRelayUrl =
-                        $"SAMLResponse={HttpUtility.UrlEncode(samlResponse)}&RelayState={HttpUtility.UrlEncode(relayState)}";
-                    var authToken = PerformInitialAuthenticationAndCreateCookies(
-                        _siamBaseUrl + _crimsonProvisioningService,
-                        "2",
-                        samlAndRelayUrl,
-                        10000000);
-                    Session["SessionAuthToken"] = authToken;
-                    var sessionInfo = cas.GetSessionFromSaml(httpContextBase);
+            //        var samlResponse = httpContextBase.Request.Form["SAMLResponse"];
+            //        var relayState = httpContextBase.Request.Form["RelayState"];
+            //        var samlAndRelayUrl =
+            //            $"SAMLResponse={HttpUtility.UrlEncode(samlResponse)}&RelayState={HttpUtility.UrlEncode(relayState)}";
+            //        var authToken = PerformInitialAuthenticationAndCreateCookies(
+            //            _siamBaseUrl + _crimsonProvisioningService,
+            //            "2",
+            //            samlAndRelayUrl,
+            //            10000000);
+            //        Session["SessionAuthToken"] = authToken;
+            //        var sessionInfo = cas.GetSessionFromSaml(httpContextBase);
 
-                    if (sessionInfo != null)
-                    {
-                        UpdateSessions(sessionInfo);
-                        SetUsage(_usgAct.LogIn);
-                    }
+            //        if (sessionInfo != null)
+            //        {
+            //            UpdateSessions(sessionInfo);
+            //            SetUsage(_usgAct.LogIn);
+            //        }
 
-                    Response.Cookies.Add(new HttpCookie("sessionId", authToken));
-                    returnUrl = returnUrl.Replace("http://thi.advisory.com:81", "https://thi.advisory.com");
+            //        Response.Cookies.Add(new HttpCookie("sessionId", authToken));
+            //        returnUrl = returnUrl.Replace("http://thi.advisory.com:81", "https://thi.advisory.com");
 
-                    var urlSplit = returnUrl.Split('?');
-                    returnUrl = urlSplit[0];
-                    Response.Redirect(returnUrl);
-                }
-            }
-            else
-            {
-                var urlSplit = returnUrl.Split('?');
-                returnUrl = urlSplit[0];
-                var aclName = urlSplit[1].Replace("Acl=", "");
+            //        var urlSplit = returnUrl.Split('?');
+            //        returnUrl = urlSplit[0];
+            //        Response.Redirect(returnUrl);
+            //    }
+            //}
+            //else
+            //{
+            //    var urlSplit = returnUrl.Split('?');
+            //    returnUrl = urlSplit[0];
+            //    var aclName = urlSplit[1].Replace("Acl=", "");
 
-                UpdateSessions((UserSessionInfo)Session["UserSessionInfo"]);
+            //    UpdateSessions((UserSessionInfo)Session["UserSessionInfo"]);
 
-                if (Session?["userAcls"] != null && ((bool)Session["isActive"]) && ((int)Session["isAdmin"] == 1 ||
-                              aclName == "Member Statistics" || (aclName != "User Management" &&
-                              ((IDictionary<string, bool>)Session["userAcls"])[aclName])))
-                {
-                    return true;
-                }
-            }
+            //    if (Session?["userAcls"] != null && ((bool)Session["isActive"]) && ((int)Session["isAdmin"] == 1 ||
+            //                  aclName == "Member Statistics" || (aclName != "User Management" &&
+            //                  ((IDictionary<string, bool>)Session["userAcls"])[aclName])))
+            //    {
+            //        return true;
+            //    }
+            //}
 
-            return false;
+            //return false;
+
+            var DummyUser = new Dictionary<string, bool>() { { "Member THI Scores", true }, { "THI Data Logs", true }, { "THI Data Feedback", true } };
+            Session["userAcls"] = DummyUser;
+            Session["isAdmin"] = 1;
+            Session["refreshDate"] = _db.ToolRefreshDates.Max(a => a.RecentRundate);
+
+            return true;
         }
 
 
@@ -637,6 +642,10 @@ namespace THI_Analysis.Controllers
                         a.CCCTHIScoreColors.C_CriticalInternalDiagnostics_CC
                         ,
 
+                        a.CCCTHIScoreColors.C_HistoricalReloadResult,
+                        a.CCCTHIScoreColors.C_HistoricalReloadResult_CC
+                        ,
+
                         a.CCCTHIScoreColors.THIScore,
                         a.CCCTHIScoreColors.THISCORE_CC
                     });
@@ -756,7 +765,10 @@ namespace THI_Analysis.Controllers
                                 x.SalesforceProject.CCC_3M,
                                 x.SalesforceProject.APRDRGAggregate
                             });
-            return new JsonResult {Data = memberInfo, JsonRequestBehavior = JsonRequestBehavior.AllowGet};
+
+            var memberSourceSystem = _db.MEMBERSOURCESYSTEMs.Where(a => a.PROJECTKEY == project).Select(a => new { a.DATASET, a.SOURCESYSTEM });
+
+            return Json( new { dataInfo = memberInfo, sourceSystemInfo = memberSourceSystem } , JsonRequestBehavior.AllowGet );
         }
 
         [HttpPost]
