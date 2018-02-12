@@ -474,6 +474,8 @@ namespace THI_Analysis.Controllers
 
             //return false;
 
+            //Comments
+
             var DummyUser = new Dictionary<string, bool>() { { "Member THI Scores", true }, { "THI Data Logs", true }, { "THI Data Feedback", true } };
             Session["userAcls"] = DummyUser;
             Session["isAdmin"] = 1;
