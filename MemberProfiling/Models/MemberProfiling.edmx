@@ -1,0 +1,632 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="MemberProfilingModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AppModules">
+          <Key>
+            <PropertyRef Name="AppModuleKey" />
+          </Key>
+          <Property Name="AppModuleKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ModuleName" Type="varchar" MaxLength="70" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AppModulesInfo">
+          <Key>
+            <PropertyRef Name="AppModuleInfoKey" />
+          </Key>
+          <Property Name="AppModuleInfoKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MemberProfileKey" Type="int" Nullable="false" />
+          <Property Name="AppModuleKey" Type="int" Nullable="false" />
+          <Property Name="Problem Module (Services)" Type="bit" Nullable="false" />
+          <Property Name="Problem Modules (Defects)" Type="bit" Nullable="false" />
+          <Property Name="Modules Accessed" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Chennai_Business_Analysts">
+          <Key>
+            <PropertyRef Name="RecordKey" />
+          </Key>
+          <Property Name="RecordKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="200" />
+          <Property Name="Email" Type="varchar" MaxLength="150" />
+          <Property Name="IsLead" Type="bit" />
+        </EntityType>
+        <EntityType Name="MemberProfilingMaster">
+          <Key>
+            <PropertyRef Name="MemberProfileKey" />
+          </Key>
+          <Property Name="MemberProfileKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Record_Dt" Type="datetime" Nullable="false" />
+          <Property Name="Year" Type="int" Nullable="false" />
+          <Property Name="Month" Type="int" Nullable="false" />
+          <Property Name="Project" Type="int" Nullable="false" />
+          <Property Name="Brief history of Member" Type="varchar(max)" />
+          <Property Name="Data Validation / Accuracy Issues" Type="int" />
+          <Property Name="Data Load / Implementation Timeliness" Type="int" />
+          <Property Name="Relationship Strength" Type="int" />
+          <Property Name="Services Current Issues" Type="varchar(max)" />
+          <Property Name="Services Current Resolution Plan" Type="varchar(max)" />
+          <Property Name="Open Enhancements / Defects" Type="int" />
+          <Property Name="Engagement" Type="int" />
+          <Property Name="PD Current Issues" Type="varchar(max)" />
+          <Property Name="PD Current Resolution Plan" Type="varchar(max)" />
+          <Property Name="IsUpdated" Type="bit" Nullable="false" />
+          <Property Name="Overall Comments" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="ProfilingScore">
+          <Key>
+            <PropertyRef Name="ProfileScoreKey" />
+          </Key>
+          <Property Name="ProfileScoreKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Score" Type="int" Nullable="false" />
+          <Property Name="ScoreDescription" Type="varchar" MaxLength="700" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SalesforceProjects">
+          <Key>
+            <PropertyRef Name="ProjectKey" />
+          </Key>
+          <Property Name="ProjectKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProjectName" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="ProdDBName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="DataManagerName" Type="varchar" MaxLength="250" />
+          <Property Name="STGDBName" Type="varchar" MaxLength="250" />
+          <Property Name="CCC_3M" Type="varchar" MaxLength="250" />
+          <Property Name="RunAPRDRG" Type="varchar" MaxLength="250" />
+          <Property Name="CustomOPPE" Type="int" />
+          <Property Name="PG" Type="int" />
+          <Property Name="MAxRR" Type="date" />
+          <Property Name="APRDRGAggregate" Type="bit" />
+          <Property Name="ProjectID" Type="varchar(max)" />
+          <Property Name="ProjectPhase" Type="varchar" MaxLength="250" />
+          <Property Name="BusinessAnalyst" Type="varchar" MaxLength="200" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'CCCOperations.mp.ProjectView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="ProjectView">
+          <Key>
+            <PropertyRef Name="ProjectKey" />
+            <PropertyRef Name="ProjectName" />
+          </Key>
+          <Property Name="ProjectKey" Type="int" Nullable="false" />
+          <Property Name="ProjectName" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="ProjectPhase" Type="nvarchar" MaxLength="255" />
+          <Property Name="Days to Contract Decision" Type="int" />
+          <Property Name="BusinessAnalyst" Type="nvarchar" MaxLength="255" />
+          <Property Name="DataAnalyst" Type="nvarchar" MaxLength="255" />
+          <Property Name="DedicatedAdvisor" Type="nvarchar" MaxLength="255" />
+          <Property Name="AnnualContractValue" Type="float" />
+          <Property Name="EarliestContractStartDate" Type="datetime" />
+          <Property Name="NextContractDecision" Type="datetime" />
+          <Property Name="LatestContractEndDate" Type="datetime" />
+        </EntityType>
+        <Association Name="FK_AppModulesInfo_AppModuleKey">
+          <End Role="AppModules" Type="Self.AppModules" Multiplicity="1" />
+          <End Role="AppModulesInfo" Type="Self.AppModulesInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AppModules">
+              <PropertyRef Name="AppModuleKey" />
+            </Principal>
+            <Dependent Role="AppModulesInfo">
+              <PropertyRef Name="AppModuleKey" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AppModulesInfo_MemberProfileKey">
+          <End Role="MemberProfilingMaster" Type="Self.MemberProfilingMaster" Multiplicity="1" />
+          <End Role="AppModulesInfo" Type="Self.AppModulesInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MemberProfilingMaster">
+              <PropertyRef Name="MemberProfileKey" />
+            </Principal>
+            <Dependent Role="AppModulesInfo">
+              <PropertyRef Name="MemberProfileKey" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MemberProfilingMaster_Data_Validation_ProfileScoreKey">
+          <End Role="ProfilingScore" Type="Self.ProfilingScore" Multiplicity="0..1" />
+          <End Role="MemberProfilingMaster" Type="Self.MemberProfilingMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProfilingScore">
+              <PropertyRef Name="ProfileScoreKey" />
+            </Principal>
+            <Dependent Role="MemberProfilingMaster">
+              <PropertyRef Name="Data Validation / Accuracy Issues" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MemberProfilingMaster_Engagement_ProfileScoreKey">
+          <End Role="ProfilingScore" Type="Self.ProfilingScore" Multiplicity="0..1" />
+          <End Role="MemberProfilingMaster" Type="Self.MemberProfilingMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProfilingScore">
+              <PropertyRef Name="ProfileScoreKey" />
+            </Principal>
+            <Dependent Role="MemberProfilingMaster">
+              <PropertyRef Name="Engagement" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MemberProfilingMaster_Implementation_Timeliness_ProfileScoreKey">
+          <End Role="ProfilingScore" Type="Self.ProfilingScore" Multiplicity="0..1" />
+          <End Role="MemberProfilingMaster" Type="Self.MemberProfilingMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProfilingScore">
+              <PropertyRef Name="ProfileScoreKey" />
+            </Principal>
+            <Dependent Role="MemberProfilingMaster">
+              <PropertyRef Name="Data Load / Implementation Timeliness" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MemberProfilingMaster_Open_Enhancements_Defects_ProfileScoreKey">
+          <End Role="ProfilingScore" Type="Self.ProfilingScore" Multiplicity="0..1" />
+          <End Role="MemberProfilingMaster" Type="Self.MemberProfilingMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProfilingScore">
+              <PropertyRef Name="ProfileScoreKey" />
+            </Principal>
+            <Dependent Role="MemberProfilingMaster">
+              <PropertyRef Name="Open Enhancements / Defects" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MemberProfilingMaster_ProjectKey">
+          <End Role="SalesforceProjects" Type="Self.SalesforceProjects" Multiplicity="1" />
+          <End Role="MemberProfilingMaster" Type="Self.MemberProfilingMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SalesforceProjects">
+              <PropertyRef Name="ProjectKey" />
+            </Principal>
+            <Dependent Role="MemberProfilingMaster">
+              <PropertyRef Name="Project" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MemberProfilingMaster_Relationship_Strength_ProfileScoreKey">
+          <End Role="ProfilingScore" Type="Self.ProfilingScore" Multiplicity="0..1" />
+          <End Role="MemberProfilingMaster" Type="Self.MemberProfilingMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProfilingScore">
+              <PropertyRef Name="ProfileScoreKey" />
+            </Principal>
+            <Dependent Role="MemberProfilingMaster">
+              <PropertyRef Name="Relationship Strength" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MemberProfilingModelStoreContainer">
+          <EntitySet Name="AppModules" EntityType="Self.AppModules" Schema="mp" store:Type="Tables" />
+          <EntitySet Name="AppModulesInfo" EntityType="Self.AppModulesInfo" Schema="mp" store:Type="Tables" />
+          <EntitySet Name="Chennai_Business_Analysts" EntityType="Self.Chennai_Business_Analysts" Schema="mp" store:Type="Tables" />
+          <EntitySet Name="MemberProfilingMaster" EntityType="Self.MemberProfilingMaster" Schema="mp" store:Type="Tables" />
+          <EntitySet Name="ProfilingScore" EntityType="Self.ProfilingScore" Schema="mp" store:Type="Tables" />
+          <EntitySet Name="SalesforceProjects" EntityType="Self.SalesforceProjects" Schema="thi" store:Type="Tables" />
+          <EntitySet Name="ProjectView" EntityType="Self.ProjectView" store:Type="Views" store:Schema="mp">
+            <DefiningQuery>SELECT 
+    [ProjectView].[ProjectKey] AS [ProjectKey], 
+    [ProjectView].[ProjectName] AS [ProjectName], 
+    [ProjectView].[ProjectPhase] AS [ProjectPhase], 
+    [ProjectView].[Days to Contract Decision] AS [Days to Contract Decision], 
+    [ProjectView].[BusinessAnalyst] AS [BusinessAnalyst], 
+    [ProjectView].[DataAnalyst] AS [DataAnalyst], 
+    [ProjectView].[DedicatedAdvisor] AS [DedicatedAdvisor], 
+    [ProjectView].[AnnualContractValue] AS [AnnualContractValue], 
+    [ProjectView].[EarliestContractStartDate] AS [EarliestContractStartDate], 
+    [ProjectView].[NextContractDecision] AS [NextContractDecision], 
+    [ProjectView].[LatestContractEndDate] AS [LatestContractEndDate]
+    FROM [mp].[ProjectView] AS [ProjectView]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_AppModulesInfo_AppModuleKey" Association="Self.FK_AppModulesInfo_AppModuleKey">
+            <End Role="AppModules" EntitySet="AppModules" />
+            <End Role="AppModulesInfo" EntitySet="AppModulesInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AppModulesInfo_MemberProfileKey" Association="Self.FK_AppModulesInfo_MemberProfileKey">
+            <End Role="MemberProfilingMaster" EntitySet="MemberProfilingMaster" />
+            <End Role="AppModulesInfo" EntitySet="AppModulesInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberProfilingMaster_Data_Validation_ProfileScoreKey" Association="Self.FK_MemberProfilingMaster_Data_Validation_ProfileScoreKey">
+            <End Role="ProfilingScore" EntitySet="ProfilingScore" />
+            <End Role="MemberProfilingMaster" EntitySet="MemberProfilingMaster" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberProfilingMaster_Engagement_ProfileScoreKey" Association="Self.FK_MemberProfilingMaster_Engagement_ProfileScoreKey">
+            <End Role="ProfilingScore" EntitySet="ProfilingScore" />
+            <End Role="MemberProfilingMaster" EntitySet="MemberProfilingMaster" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberProfilingMaster_Implementation_Timeliness_ProfileScoreKey" Association="Self.FK_MemberProfilingMaster_Implementation_Timeliness_ProfileScoreKey">
+            <End Role="ProfilingScore" EntitySet="ProfilingScore" />
+            <End Role="MemberProfilingMaster" EntitySet="MemberProfilingMaster" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberProfilingMaster_Open_Enhancements_Defects_ProfileScoreKey" Association="Self.FK_MemberProfilingMaster_Open_Enhancements_Defects_ProfileScoreKey">
+            <End Role="ProfilingScore" EntitySet="ProfilingScore" />
+            <End Role="MemberProfilingMaster" EntitySet="MemberProfilingMaster" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberProfilingMaster_ProjectKey" Association="Self.FK_MemberProfilingMaster_ProjectKey">
+            <End Role="SalesforceProjects" EntitySet="SalesforceProjects" />
+            <End Role="MemberProfilingMaster" EntitySet="MemberProfilingMaster" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberProfilingMaster_Relationship_Strength_ProfileScoreKey" Association="Self.FK_MemberProfilingMaster_Relationship_Strength_ProfileScoreKey">
+            <End Role="ProfilingScore" EntitySet="ProfilingScore" />
+            <End Role="MemberProfilingMaster" EntitySet="MemberProfilingMaster" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MemberProfilingModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AppModule">
+          <Key>
+            <PropertyRef Name="AppModuleKey" />
+          </Key>
+          <Property Name="AppModuleKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ModuleName" Type="String" MaxLength="70" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="AppModulesInfoes" Relationship="Self.FK_AppModulesInfo_AppModuleKey" FromRole="AppModules" ToRole="AppModulesInfo" />
+        </EntityType>
+        <EntityType Name="AppModulesInfo">
+          <Key>
+            <PropertyRef Name="AppModuleInfoKey" />
+          </Key>
+          <Property Name="AppModuleInfoKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MemberProfileKey" Type="Int32" Nullable="false" />
+          <Property Name="AppModuleKey" Type="Int32" Nullable="false" />
+          <Property Name="Problem_Module__Services_" Type="Boolean" Nullable="false" />
+          <Property Name="Problem_Modules__Defects_" Type="Boolean" Nullable="false" />
+          <Property Name="Modules_Accessed" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AppModule" Relationship="Self.FK_AppModulesInfo_AppModuleKey" FromRole="AppModulesInfo" ToRole="AppModules" />
+          <NavigationProperty Name="MemberProfilingMaster" Relationship="Self.FK_AppModulesInfo_MemberProfileKey" FromRole="AppModulesInfo" ToRole="MemberProfilingMaster" />
+        </EntityType>
+        <EntityType Name="Chennai_Business_Analysts">
+          <Key>
+            <PropertyRef Name="RecordKey" />
+          </Key>
+          <Property Name="RecordKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="IsLead" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="MemberProfilingMaster">
+          <Key>
+            <PropertyRef Name="MemberProfileKey" />
+          </Key>
+          <Property Name="MemberProfileKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Record_Dt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Year" Type="Int32" Nullable="false" />
+          <Property Name="Month" Type="Int32" Nullable="false" />
+          <Property Name="Project" Type="Int32" Nullable="false" />
+          <Property Name="Brief_history_of_Member" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Data_Validation___Accuracy_Issues" Type="Int32" />
+          <Property Name="Data_Load___Implementation_Timeliness" Type="Int32" />
+          <Property Name="Relationship_Strength" Type="Int32" />
+          <Property Name="Services_Current_Issues" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Services_Current_Resolution_Plan" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Open_Enhancements___Defects" Type="Int32" />
+          <Property Name="Engagement" Type="Int32" />
+          <Property Name="PD_Current_Issues" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="PD_Current_Resolution_Plan" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IsUpdated" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AppModulesInfoes" Relationship="Self.FK_AppModulesInfo_MemberProfileKey" FromRole="MemberProfilingMaster" ToRole="AppModulesInfo" />
+          <NavigationProperty Name="ProfilingScore" Relationship="Self.FK_MemberProfilingMaster_Data_Validation_ProfileScoreKey" FromRole="MemberProfilingMaster" ToRole="ProfilingScore" />
+          <NavigationProperty Name="ProfilingScore1" Relationship="Self.FK_MemberProfilingMaster_Engagement_ProfileScoreKey" FromRole="MemberProfilingMaster" ToRole="ProfilingScore" />
+          <NavigationProperty Name="ProfilingScore2" Relationship="Self.FK_MemberProfilingMaster_Implementation_Timeliness_ProfileScoreKey" FromRole="MemberProfilingMaster" ToRole="ProfilingScore" />
+          <NavigationProperty Name="ProfilingScore3" Relationship="Self.FK_MemberProfilingMaster_Open_Enhancements_Defects_ProfileScoreKey" FromRole="MemberProfilingMaster" ToRole="ProfilingScore" />
+          <NavigationProperty Name="SalesforceProject" Relationship="Self.FK_MemberProfilingMaster_ProjectKey" FromRole="MemberProfilingMaster" ToRole="SalesforceProjects" />
+          <NavigationProperty Name="ProfilingScore4" Relationship="Self.FK_MemberProfilingMaster_Relationship_Strength_ProfileScoreKey" FromRole="MemberProfilingMaster" ToRole="ProfilingScore" />
+          <Property Name="Overall_Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="ProfilingScore">
+          <Key>
+            <PropertyRef Name="ProfileScoreKey" />
+          </Key>
+          <Property Name="ProfileScoreKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Score" Type="Int32" Nullable="false" />
+          <Property Name="ScoreDescription" Type="String" MaxLength="700" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="MemberProfilingMasters" Relationship="Self.FK_MemberProfilingMaster_Data_Validation_ProfileScoreKey" FromRole="ProfilingScore" ToRole="MemberProfilingMaster" />
+          <NavigationProperty Name="MemberProfilingMasters1" Relationship="Self.FK_MemberProfilingMaster_Engagement_ProfileScoreKey" FromRole="ProfilingScore" ToRole="MemberProfilingMaster" />
+          <NavigationProperty Name="MemberProfilingMasters2" Relationship="Self.FK_MemberProfilingMaster_Implementation_Timeliness_ProfileScoreKey" FromRole="ProfilingScore" ToRole="MemberProfilingMaster" />
+          <NavigationProperty Name="MemberProfilingMasters3" Relationship="Self.FK_MemberProfilingMaster_Open_Enhancements_Defects_ProfileScoreKey" FromRole="ProfilingScore" ToRole="MemberProfilingMaster" />
+          <NavigationProperty Name="MemberProfilingMasters4" Relationship="Self.FK_MemberProfilingMaster_Relationship_Strength_ProfileScoreKey" FromRole="ProfilingScore" ToRole="MemberProfilingMaster" />
+        </EntityType>
+        <EntityType Name="SalesforceProject">
+          <Key>
+            <PropertyRef Name="ProjectKey" />
+          </Key>
+          <Property Name="ProjectKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProjectName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ProdDBName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DataManagerName" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="STGDBName" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="CCC_3M" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="RunAPRDRG" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="CustomOPPE" Type="Int32" />
+          <Property Name="PG" Type="Int32" />
+          <Property Name="MAxRR" Type="DateTime" Precision="0" />
+          <Property Name="APRDRGAggregate" Type="Boolean" />
+          <Property Name="ProjectID" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ProjectPhase" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="BusinessAnalyst" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="MemberProfilingMasters" Relationship="Self.FK_MemberProfilingMaster_ProjectKey" FromRole="SalesforceProjects" ToRole="MemberProfilingMaster" />
+        </EntityType>
+        <EntityType Name="ProjectView">
+          <Key>
+            <PropertyRef Name="ProjectKey" />
+            <PropertyRef Name="ProjectName" />
+          </Key>
+          <Property Name="ProjectKey" Type="Int32" Nullable="false" />
+          <Property Name="ProjectName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ProjectPhase" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Days_to_Contract_Decision" Type="Int32" />
+          <Property Name="BusinessAnalyst" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="DataAnalyst" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="DedicatedAdvisor" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="AnnualContractValue" Type="Double" />
+          <Property Name="EarliestContractStartDate" Type="DateTime" Precision="3" />
+          <Property Name="NextContractDecision" Type="DateTime" Precision="3" />
+          <Property Name="LatestContractEndDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <Association Name="FK_AppModulesInfo_AppModuleKey">
+          <End Role="AppModules" Type="Self.AppModule" Multiplicity="1" />
+          <End Role="AppModulesInfo" Type="Self.AppModulesInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AppModules">
+              <PropertyRef Name="AppModuleKey" />
+            </Principal>
+            <Dependent Role="AppModulesInfo">
+              <PropertyRef Name="AppModuleKey" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AppModulesInfo_MemberProfileKey">
+          <End Role="MemberProfilingMaster" Type="Self.MemberProfilingMaster" Multiplicity="1" />
+          <End Role="AppModulesInfo" Type="Self.AppModulesInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MemberProfilingMaster">
+              <PropertyRef Name="MemberProfileKey" />
+            </Principal>
+            <Dependent Role="AppModulesInfo">
+              <PropertyRef Name="MemberProfileKey" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MemberProfilingMaster_Data_Validation_ProfileScoreKey">
+          <End Role="ProfilingScore" Type="Self.ProfilingScore" Multiplicity="0..1" />
+          <End Role="MemberProfilingMaster" Type="Self.MemberProfilingMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProfilingScore">
+              <PropertyRef Name="ProfileScoreKey" />
+            </Principal>
+            <Dependent Role="MemberProfilingMaster">
+              <PropertyRef Name="Data_Validation___Accuracy_Issues" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MemberProfilingMaster_Engagement_ProfileScoreKey">
+          <End Role="ProfilingScore" Type="Self.ProfilingScore" Multiplicity="0..1" />
+          <End Role="MemberProfilingMaster" Type="Self.MemberProfilingMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProfilingScore">
+              <PropertyRef Name="ProfileScoreKey" />
+            </Principal>
+            <Dependent Role="MemberProfilingMaster">
+              <PropertyRef Name="Engagement" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MemberProfilingMaster_Implementation_Timeliness_ProfileScoreKey">
+          <End Role="ProfilingScore" Type="Self.ProfilingScore" Multiplicity="0..1" />
+          <End Role="MemberProfilingMaster" Type="Self.MemberProfilingMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProfilingScore">
+              <PropertyRef Name="ProfileScoreKey" />
+            </Principal>
+            <Dependent Role="MemberProfilingMaster">
+              <PropertyRef Name="Data_Load___Implementation_Timeliness" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MemberProfilingMaster_Open_Enhancements_Defects_ProfileScoreKey">
+          <End Role="ProfilingScore" Type="Self.ProfilingScore" Multiplicity="0..1" />
+          <End Role="MemberProfilingMaster" Type="Self.MemberProfilingMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProfilingScore">
+              <PropertyRef Name="ProfileScoreKey" />
+            </Principal>
+            <Dependent Role="MemberProfilingMaster">
+              <PropertyRef Name="Open_Enhancements___Defects" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MemberProfilingMaster_ProjectKey">
+          <End Role="SalesforceProjects" Type="Self.SalesforceProject" Multiplicity="1" />
+          <End Role="MemberProfilingMaster" Type="Self.MemberProfilingMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SalesforceProjects">
+              <PropertyRef Name="ProjectKey" />
+            </Principal>
+            <Dependent Role="MemberProfilingMaster">
+              <PropertyRef Name="Project" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MemberProfilingMaster_Relationship_Strength_ProfileScoreKey">
+          <End Role="ProfilingScore" Type="Self.ProfilingScore" Multiplicity="0..1" />
+          <End Role="MemberProfilingMaster" Type="Self.MemberProfilingMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProfilingScore">
+              <PropertyRef Name="ProfileScoreKey" />
+            </Principal>
+            <Dependent Role="MemberProfilingMaster">
+              <PropertyRef Name="Relationship_Strength" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MemberProfilingEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AppModules" EntityType="Self.AppModule" />
+          <EntitySet Name="AppModulesInfoes" EntityType="Self.AppModulesInfo" />
+          <EntitySet Name="Chennai_Business_Analysts" EntityType="Self.Chennai_Business_Analysts" />
+          <EntitySet Name="MemberProfilingMasters" EntityType="Self.MemberProfilingMaster" />
+          <EntitySet Name="ProfilingScores" EntityType="Self.ProfilingScore" />
+          <EntitySet Name="SalesforceProjects" EntityType="Self.SalesforceProject" />
+          <EntitySet Name="ProjectViews" EntityType="Self.ProjectView" />
+          <AssociationSet Name="FK_AppModulesInfo_AppModuleKey" Association="Self.FK_AppModulesInfo_AppModuleKey">
+            <End Role="AppModules" EntitySet="AppModules" />
+            <End Role="AppModulesInfo" EntitySet="AppModulesInfoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AppModulesInfo_MemberProfileKey" Association="Self.FK_AppModulesInfo_MemberProfileKey">
+            <End Role="MemberProfilingMaster" EntitySet="MemberProfilingMasters" />
+            <End Role="AppModulesInfo" EntitySet="AppModulesInfoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberProfilingMaster_Data_Validation_ProfileScoreKey" Association="Self.FK_MemberProfilingMaster_Data_Validation_ProfileScoreKey">
+            <End Role="ProfilingScore" EntitySet="ProfilingScores" />
+            <End Role="MemberProfilingMaster" EntitySet="MemberProfilingMasters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberProfilingMaster_Engagement_ProfileScoreKey" Association="Self.FK_MemberProfilingMaster_Engagement_ProfileScoreKey">
+            <End Role="ProfilingScore" EntitySet="ProfilingScores" />
+            <End Role="MemberProfilingMaster" EntitySet="MemberProfilingMasters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberProfilingMaster_Implementation_Timeliness_ProfileScoreKey" Association="Self.FK_MemberProfilingMaster_Implementation_Timeliness_ProfileScoreKey">
+            <End Role="ProfilingScore" EntitySet="ProfilingScores" />
+            <End Role="MemberProfilingMaster" EntitySet="MemberProfilingMasters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberProfilingMaster_Open_Enhancements_Defects_ProfileScoreKey" Association="Self.FK_MemberProfilingMaster_Open_Enhancements_Defects_ProfileScoreKey">
+            <End Role="ProfilingScore" EntitySet="ProfilingScores" />
+            <End Role="MemberProfilingMaster" EntitySet="MemberProfilingMasters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberProfilingMaster_ProjectKey" Association="Self.FK_MemberProfilingMaster_ProjectKey">
+            <End Role="SalesforceProjects" EntitySet="SalesforceProjects" />
+            <End Role="MemberProfilingMaster" EntitySet="MemberProfilingMasters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberProfilingMaster_Relationship_Strength_ProfileScoreKey" Association="Self.FK_MemberProfilingMaster_Relationship_Strength_ProfileScoreKey">
+            <End Role="ProfilingScore" EntitySet="ProfilingScores" />
+            <End Role="MemberProfilingMaster" EntitySet="MemberProfilingMasters" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MemberProfilingModelStoreContainer" CdmEntityContainer="MemberProfilingEntities">
+          <EntitySetMapping Name="AppModules">
+            <EntityTypeMapping TypeName="MemberProfilingModel.AppModule">
+              <MappingFragment StoreEntitySet="AppModules">
+                <ScalarProperty Name="AppModuleKey" ColumnName="AppModuleKey" />
+                <ScalarProperty Name="ModuleName" ColumnName="ModuleName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AppModulesInfoes">
+            <EntityTypeMapping TypeName="MemberProfilingModel.AppModulesInfo">
+              <MappingFragment StoreEntitySet="AppModulesInfo">
+                <ScalarProperty Name="AppModuleInfoKey" ColumnName="AppModuleInfoKey" />
+                <ScalarProperty Name="MemberProfileKey" ColumnName="MemberProfileKey" />
+                <ScalarProperty Name="AppModuleKey" ColumnName="AppModuleKey" />
+                <ScalarProperty Name="Problem_Module__Services_" ColumnName="Problem Module (Services)" />
+                <ScalarProperty Name="Problem_Modules__Defects_" ColumnName="Problem Modules (Defects)" />
+                <ScalarProperty Name="Modules_Accessed" ColumnName="Modules Accessed" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Chennai_Business_Analysts">
+            <EntityTypeMapping TypeName="MemberProfilingModel.Chennai_Business_Analysts">
+              <MappingFragment StoreEntitySet="Chennai_Business_Analysts">
+                <ScalarProperty Name="RecordKey" ColumnName="RecordKey" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="IsLead" ColumnName="IsLead" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MemberProfilingMasters">
+            <EntityTypeMapping TypeName="MemberProfilingModel.MemberProfilingMaster">
+              <MappingFragment StoreEntitySet="MemberProfilingMaster">
+                <ScalarProperty Name="Overall_Comments" ColumnName="Overall Comments" />
+                <ScalarProperty Name="MemberProfileKey" ColumnName="MemberProfileKey" />
+                <ScalarProperty Name="Record_Dt" ColumnName="Record_Dt" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="Month" ColumnName="Month" />
+                <ScalarProperty Name="Project" ColumnName="Project" />
+                <ScalarProperty Name="Brief_history_of_Member" ColumnName="Brief history of Member" />
+                <ScalarProperty Name="Data_Validation___Accuracy_Issues" ColumnName="Data Validation / Accuracy Issues" />
+                <ScalarProperty Name="Data_Load___Implementation_Timeliness" ColumnName="Data Load / Implementation Timeliness" />
+                <ScalarProperty Name="Relationship_Strength" ColumnName="Relationship Strength" />
+                <ScalarProperty Name="Services_Current_Issues" ColumnName="Services Current Issues" />
+                <ScalarProperty Name="Services_Current_Resolution_Plan" ColumnName="Services Current Resolution Plan" />
+                <ScalarProperty Name="Open_Enhancements___Defects" ColumnName="Open Enhancements / Defects" />
+                <ScalarProperty Name="Engagement" ColumnName="Engagement" />
+                <ScalarProperty Name="PD_Current_Issues" ColumnName="PD Current Issues" />
+                <ScalarProperty Name="PD_Current_Resolution_Plan" ColumnName="PD Current Resolution Plan" />
+                <ScalarProperty Name="IsUpdated" ColumnName="IsUpdated" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProfilingScores">
+            <EntityTypeMapping TypeName="MemberProfilingModel.ProfilingScore">
+              <MappingFragment StoreEntitySet="ProfilingScore">
+                <ScalarProperty Name="ProfileScoreKey" ColumnName="ProfileScoreKey" />
+                <ScalarProperty Name="Score" ColumnName="Score" />
+                <ScalarProperty Name="ScoreDescription" ColumnName="ScoreDescription" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SalesforceProjects">
+            <EntityTypeMapping TypeName="MemberProfilingModel.SalesforceProject">
+              <MappingFragment StoreEntitySet="SalesforceProjects">
+                <ScalarProperty Name="ProjectKey" ColumnName="ProjectKey" />
+                <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
+                <ScalarProperty Name="ProdDBName" ColumnName="ProdDBName" />
+                <ScalarProperty Name="DataManagerName" ColumnName="DataManagerName" />
+                <ScalarProperty Name="STGDBName" ColumnName="STGDBName" />
+                <ScalarProperty Name="CCC_3M" ColumnName="CCC_3M" />
+                <ScalarProperty Name="RunAPRDRG" ColumnName="RunAPRDRG" />
+                <ScalarProperty Name="CustomOPPE" ColumnName="CustomOPPE" />
+                <ScalarProperty Name="PG" ColumnName="PG" />
+                <ScalarProperty Name="MAxRR" ColumnName="MAxRR" />
+                <ScalarProperty Name="APRDRGAggregate" ColumnName="APRDRGAggregate" />
+                <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+                <ScalarProperty Name="ProjectPhase" ColumnName="ProjectPhase" />
+                <ScalarProperty Name="BusinessAnalyst" ColumnName="BusinessAnalyst" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProjectViews">
+            <EntityTypeMapping TypeName="MemberProfilingModel.ProjectView">
+              <MappingFragment StoreEntitySet="ProjectView">
+                <ScalarProperty Name="ProjectKey" ColumnName="ProjectKey" />
+                <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
+                <ScalarProperty Name="ProjectPhase" ColumnName="ProjectPhase" />
+                <ScalarProperty Name="Days_to_Contract_Decision" ColumnName="Days to Contract Decision" />
+                <ScalarProperty Name="BusinessAnalyst" ColumnName="BusinessAnalyst" />
+                <ScalarProperty Name="DataAnalyst" ColumnName="DataAnalyst" />
+                <ScalarProperty Name="DedicatedAdvisor" ColumnName="DedicatedAdvisor" />
+                <ScalarProperty Name="AnnualContractValue" ColumnName="AnnualContractValue" />
+                <ScalarProperty Name="EarliestContractStartDate" ColumnName="EarliestContractStartDate" />
+                <ScalarProperty Name="NextContractDecision" ColumnName="NextContractDecision" />
+                <ScalarProperty Name="LatestContractEndDate" ColumnName="LatestContractEndDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

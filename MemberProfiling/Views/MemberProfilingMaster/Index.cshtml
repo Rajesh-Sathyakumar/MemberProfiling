@@ -1,0 +1,119 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="content-wrapper" id="MemberProfilingMaster">
+    <!-- Content Header (Page header) -->
+    <section class="content-header" id="introduction">
+        <h1>
+            Member Profiling
+        </h1>
+    </section>
+
+    <section class="content">
+
+
+        <div class="box box-danger">
+
+            <div class="box-body">
+                <div class="row">
+
+                    <div class="form-group col-md-6">
+                        <label>Business Analyst</label>
+                        @Html.DropDownList("BusinessAnalysts", null, htmlAttributes: new { @class = "form-control", @style = "width: 100%;", @aria_hidden = "true", id="businessAnalystKey"})
+                    </div>
+
+
+
+                    <div class="form-group col-md-2" id="Year">
+                        <label>Year</label>
+                        <select class="form-control" style="width: 100%;" id="yearSelection">
+
+                            <option value="2018">2018</option>
+                            <option value="2019">2019</option>
+                            <option value="2020">2020</option>
+
+                        </select>
+                    </div>
+
+                    <div class="form-group col-md-2" id="Month">
+                        <label>Month</label>
+                        <select class="form-control" style="width: 100%;" id="monthSelection">
+                            <option value="1">January</option>
+                            <option value="2">February</option>
+                            <option value="3">March</option>
+                            <option value="4">April</option>
+                            <option value="5">May</option>
+                            <option value="6">June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-block btn-primary" id="showMemberProfiles" value="showMemberProfiles">Show Member Profiles</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box box-primary">
+
+                    <div class="box-body">
+
+                        <table class="table table-bordered table-hover container" id="MemberProfilingTable">
+                            <thead>
+                                <tr>
+                                    <th>S.No.</th>
+
+                                    <th>
+                                        Project Name
+                                    </th>
+
+                                    <th>
+                                        Project Phase
+                                    </th>
+
+                                    <th>
+                                        Business Analyst
+                                    </th>
+
+                                    <th>
+                                        Services Current Issues
+                                    </th>
+
+                                    <th>
+                                        Product Dev Current Issues
+                                    </th>
+
+                                    <th>
+                                        Overall Services/Dev Score
+                                    </th>
+
+                                    <th>
+                                        Profiling Completed?
+                                    </th>
+                                    <th>Update Record</th>
+                                </tr>
+                            </thead>
+                            <tbody id="memberProfileData"></tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+

@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="MPStoreContainer" CdmEntityContainer="MemberProfiling">
+    <EntitySetMapping Name="AppModules">
+      <EntityTypeMapping TypeName="MP.AppModule">
+        <MappingFragment StoreEntitySet="AppModules">
+          <ScalarProperty Name="AppModuleKey" ColumnName="AppModuleKey" />
+          <ScalarProperty Name="ModuleName" ColumnName="ModuleName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AppModulesInfoes">
+      <EntityTypeMapping TypeName="MP.AppModulesInfo">
+        <MappingFragment StoreEntitySet="AppModulesInfo">
+          <ScalarProperty Name="AppModuleInfoKey" ColumnName="AppModuleInfoKey" />
+          <ScalarProperty Name="MemberProfileKey" ColumnName="MemberProfileKey" />
+          <ScalarProperty Name="AppModuleKey" ColumnName="AppModuleKey" />
+          <ScalarProperty Name="Problem_Module__Services_" ColumnName="Problem Module (Services)" />
+          <ScalarProperty Name="Problem_Modules__Defects_" ColumnName="Problem Modules (Defects)" />
+          <ScalarProperty Name="Modules_Accessed" ColumnName="Modules Accessed" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Chennai_Business_Analysts">
+      <EntityTypeMapping TypeName="MP.Chennai_Business_Analysts">
+        <MappingFragment StoreEntitySet="Chennai_Business_Analysts">
+          <ScalarProperty Name="RecordKey" ColumnName="RecordKey" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="IsLead" ColumnName="IsLead" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MemberProfilingMasters">
+      <EntityTypeMapping TypeName="MP.MemberProfilingMaster">
+        <MappingFragment StoreEntitySet="MemberProfilingMaster">
+          <ScalarProperty Name="MemberProfileKey" ColumnName="MemberProfileKey" />
+          <ScalarProperty Name="Record_Dt" ColumnName="Record_Dt" />
+          <ScalarProperty Name="Year" ColumnName="Year" />
+          <ScalarProperty Name="Month" ColumnName="Month" />
+          <ScalarProperty Name="Project" ColumnName="Project" />
+          <ScalarProperty Name="Brief_history_of_Member" ColumnName="Brief history of Member" />
+          <ScalarProperty Name="Data_Validation___Accuracy_Issues" ColumnName="Data Validation / Accuracy Issues" />
+          <ScalarProperty Name="Data_Load___Implementation_Timeliness" ColumnName="Data Load / Implementation Timeliness" />
+          <ScalarProperty Name="Relationship_Strength" ColumnName="Relationship Strength" />
+          <ScalarProperty Name="Services_Current_Issues" ColumnName="Services Current Issues" />
+          <ScalarProperty Name="Services_Current_Resolution_Plan" ColumnName="Services Current Resolution Plan" />
+          <ScalarProperty Name="Open_Enhancements___Defects" ColumnName="Open Enhancements / Defects" />
+          <ScalarProperty Name="Engagement" ColumnName="Engagement" />
+          <ScalarProperty Name="PD_Current_Issues" ColumnName="PD Current Issues" />
+          <ScalarProperty Name="PD_Current_Resolution_Plan" ColumnName="PD Current Resolution Plan" />
+          <ScalarProperty Name="IsUpdated" ColumnName="IsUpdated" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProfilingScores">
+      <EntityTypeMapping TypeName="MP.ProfilingScore">
+        <MappingFragment StoreEntitySet="ProfilingScore">
+          <ScalarProperty Name="ProfileScoreKey" ColumnName="ProfileScoreKey" />
+          <ScalarProperty Name="Score" ColumnName="Score" />
+          <ScalarProperty Name="ScoreDescription" ColumnName="ScoreDescription" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SalesforceProjects">
+      <EntityTypeMapping TypeName="MP.SalesforceProject">
+        <MappingFragment StoreEntitySet="SalesforceProjects">
+          <ScalarProperty Name="ProjectKey" ColumnName="ProjectKey" />
+          <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
+          <ScalarProperty Name="ProdDBName" ColumnName="ProdDBName" />
+          <ScalarProperty Name="DataManagerName" ColumnName="DataManagerName" />
+          <ScalarProperty Name="STGDBName" ColumnName="STGDBName" />
+          <ScalarProperty Name="CCC_3M" ColumnName="CCC_3M" />
+          <ScalarProperty Name="RunAPRDRG" ColumnName="RunAPRDRG" />
+          <ScalarProperty Name="CustomOPPE" ColumnName="CustomOPPE" />
+          <ScalarProperty Name="PG" ColumnName="PG" />
+          <ScalarProperty Name="MAxRR" ColumnName="MAxRR" />
+          <ScalarProperty Name="APRDRGAggregate" ColumnName="APRDRGAggregate" />
+          <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+          <ScalarProperty Name="ProjectPhase" ColumnName="ProjectPhase" />
+          <ScalarProperty Name="BusinessAnalyst" ColumnName="BusinessAnalyst" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProjectViews">
+      <EntityTypeMapping TypeName="MP.ProjectView">
+        <MappingFragment StoreEntitySet="ProjectView">
+          <ScalarProperty Name="ProjectKey" ColumnName="ProjectKey" />
+          <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
+          <ScalarProperty Name="ProjectPhase" ColumnName="ProjectPhase" />
+          <ScalarProperty Name="Days_to_Contract_Decision" ColumnName="Days to Contract Decision" />
+          <ScalarProperty Name="BusinessAnalyst" ColumnName="BusinessAnalyst" />
+          <ScalarProperty Name="DataAnalyst" ColumnName="DataAnalyst" />
+          <ScalarProperty Name="DedicatedAdvisor" ColumnName="DedicatedAdvisor" />
+          <ScalarProperty Name="AnnualContractValue" ColumnName="AnnualContractValue" />
+          <ScalarProperty Name="EarliestContractStartDate" ColumnName="EarliestContractStartDate" />
+          <ScalarProperty Name="NextContractDecision" ColumnName="NextContractDecision" />
+          <ScalarProperty Name="LatestContractEndDate" ColumnName="LatestContractEndDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

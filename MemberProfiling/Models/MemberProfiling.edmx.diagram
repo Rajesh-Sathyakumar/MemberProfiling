@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="f5aa50c73fd940bd8f4b790b7e74a75e" Name="Diagram1">
+        <EntityTypeShape EntityType="MemberProfilingModel.AppModule" Width="1.5" PointX="3" PointY="8" IsExpanded="true" />
+        <EntityTypeShape EntityType="MemberProfilingModel.AppModulesInfo" Width="1.5" PointX="5.25" PointY="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MemberProfilingModel.Chennai_Business_Analysts" Width="1.5" PointX="5.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MemberProfilingModel.MemberProfilingMaster" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MemberProfilingModel.ProfilingScore" Width="1.5" PointX="0.75" PointY="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MemberProfilingModel.SalesforceProject" Width="1.5" PointX="0.75" PointY="6.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MemberProfilingModel.ProjectView" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <AssociationConnector Association="MemberProfilingModel.FK_AppModulesInfo_AppModuleKey" ManuallyRouted="false" />
+        <AssociationConnector Association="MemberProfilingModel.FK_AppModulesInfo_MemberProfileKey" ManuallyRouted="false" />
+        <AssociationConnector Association="MemberProfilingModel.FK_MemberProfilingMaster_Data_Validation_ProfileScoreKey" ManuallyRouted="false" />
+        <AssociationConnector Association="MemberProfilingModel.FK_MemberProfilingMaster_Engagement_ProfileScoreKey" ManuallyRouted="false" />
+        <AssociationConnector Association="MemberProfilingModel.FK_MemberProfilingMaster_Implementation_Timeliness_ProfileScoreKey" ManuallyRouted="false" />
+        <AssociationConnector Association="MemberProfilingModel.FK_MemberProfilingMaster_Open_Enhancements_Defects_ProfileScoreKey" ManuallyRouted="false" />
+        <AssociationConnector Association="MemberProfilingModel.FK_MemberProfilingMaster_ProjectKey" ManuallyRouted="false" />
+        <AssociationConnector Association="MemberProfilingModel.FK_MemberProfilingMaster_Relationship_Strength_ProfileScoreKey" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

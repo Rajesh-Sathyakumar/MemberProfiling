@@ -1,0 +1,350 @@
+﻿@model MemberProfiling.Models.MemberProfilingMaster
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var projectView = ViewBag.ProjectView;
+    var scores = ViewBag.Scores;
+}
+
+@functions{
+    private static string AssertInt(int? value)
+    {
+
+        if (value == null) return "N/A";
+        else return value.ToString();
+    }
+    private static string AssertDate(object value)
+    {
+        if (value == null) return "N/A";
+        else return ((DateTime)value).ToShortDateString();
+    }
+    private static string AssertStr(string value)
+    {
+        if (value == null) return "N/A";
+        else return value;
+    }
+    private static string AssertMny(double? value)
+    {
+        if (value == null) return "N/A";
+        else return ("$ " + string.Format("{0:n}", value));
+    }
+}
+
+
+<div class="content-wrapper" id="MemberProfilingEdit">
+    <!-- Content Header (Page header) -->
+    <section class="content-header" id="introduction">
+        <h1>
+            Member Profiling
+            <small>@Model.SalesforceProject.ProjectName</small>
+        </h1>
+    </section>
+
+    <section class="content">
+
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="box box-danger container">
+
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">Overall</h3>
+                                </div>
+                                <div class="box-body">
+                                    <div class="form-group">
+                                        @Html.Hidden("MemberProfileKey")
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Brief History of Member</label>
+
+                                        @Html.TextArea("Brief_history_of_Member", null, new { @class = "form-control", @rows = "3", @placeholder = "Your Comments ...", @style = "resize: none;" })
+                                        @Html.ValidationMessageFor(model => model.Brief_history_of_Member, "", new { @class = "text-danger" })
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Overall Comments</label>
+
+                                        @Html.TextArea("Overall_Comments", null, new { @class = "form-control", @rows = "3", @placeholder = "Your Comments ...", @style = "resize: none;" })
+                                        @Html.ValidationMessageFor(model => model.Overall_Comments, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-12">
+                            <div class="box box-success container">
+
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">Services</h3>
+                                </div>
+
+                                <div class="box-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Data Validation / Accuracy Issues</label>
+
+                                                @Html.DropDownList("Data_Validation___Accuracy_Issues", null, htmlAttributes: new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(model => model.Data_Validation___Accuracy_Issues, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>DL / IMPL Timeliness</label>
+
+                                                @Html.DropDownList("Data_Load___Implementation_Timeliness", null, htmlAttributes: new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(model => model.Data_Load___Implementation_Timeliness, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Relationship Strength</label>
+
+                                                @Html.DropDownList("Relationship_Strength", null, htmlAttributes: new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(model => model.Relationship_Strength, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Services Current Issues</label>
+
+                                                @Html.TextArea("Services_Current_Issues", null, new { @class = "form-control", @rows = "3", @placeholder = "Your Comments ...", @style = "resize: none;" })
+                                                @Html.ValidationMessageFor(model => model.Services_Current_Issues, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Services Current Resolution Plan</label>
+
+                                                @Html.TextArea("Services_Current_Resolution_Plan", null, new { @class = "form-control", @rows = "3", @placeholder = "Your Comments ...", @style = "resize: none;" })
+                                                @Html.ValidationMessageFor(model => model.Services_Current_Resolution_Plan, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <div class="form-group">
+                                                <label>Modules (Services)</label>
+
+                                                @Html.DropDownList("Modules" , null, htmlAttributes: new { @class = "form-control app-modules", @name = "moduleServices", @multiple = "multiple", id = "moduleServices" })
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-md-6">
+                    <div class="box box-primary container">
+
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Profiling Scores Definition</h3>
+                        </div>
+
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <table class="table table-bordered table-hover container" id="MemberProfilingTable">
+                                        <thead></thead>
+                                        <tbody>
+                                            @foreach (var score in scores)
+                                            {
+                                                <tr>
+                                                    <th>@score.Score.ToString()</th>
+                                                    <td>@score.ScoreDescription</td>
+                                                </tr>
+                                            }
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="box box-primary container">
+
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Project Details</h3>
+                        </div>
+
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <table class="table table-bordered table-hover container" id="MemberProfilingTable">
+                                        <thead>
+
+                                        </thead>
+                                        <tbody>
+                                            <tr><th>Project Name</th><td>@AssertStr(projectView.ProjectName)</td></tr>
+                                            <tr><th>Project Phase</th><td>@AssertStr(projectView.ProjectPhase)</td></tr>
+                                            <tr><th>Days to Contract Decision</th><td>@AssertInt(projectView.Days_to_Contract_Decision)</td></tr>
+                                            <tr><th>Business Analyst</th><td>@AssertStr(projectView.BusinessAnalyst)</td></tr>
+                                            <tr><th>Data Analyst</th><td>@AssertStr(projectView.DataAnalyst)</td></tr>
+                                            <tr><th>Dedicated Advisor</th><td>@AssertStr(projectView.DedicatedAdvisor)</td></tr>
+                                            <tr><th>Annual Contract Value</th><td>@AssertMny(projectView.AnnualContractValue)</td></tr>
+                                            <tr><th>Earliest Contract Start Date</th><td>@AssertDate(projectView.EarliestContractStartDate)</td></tr>
+                                            <tr><th>Next Contract Decision</th><td>@AssertDate(projectView.NextContractDecision)</td></tr>
+                                            <tr><th>Latest Contract End Date</th><td>@AssertDate(projectView.LatestContractEndDate)</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                <div class="row">
+
+                    <div class="col-md-6">
+
+                        <div class="box box-primary container">
+
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Product Dev</h3>
+                            </div>
+
+                            <div class="box-body" style="height:503px">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Open Enhancements / Defects</label>
+
+                                            @Html.DropDownList("Open_Enhancements___Defects", null, htmlAttributes: new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.Open_Enhancements___Defects, "", new { @class = "text-danger" })
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-offset-2 col-md-4">
+                                        <div class="form-group">
+                                            <label>Engagement</label>
+                                            @Html.DropDownList("Engagement", null, htmlAttributes: new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.Engagement, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Product Dev Current Issues</label>
+
+                                            @Html.TextArea("PD_Current_Issues", null, new { @class = "form-control", @rows = "3", @placeholder = "Your Comments ...", @style = "resize: none;" })
+                                            @Html.ValidationMessageFor(model => model.PD_Current_Issues, "", new { @class = "text-danger" })
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Product Dev Current Resolution Plan</label>
+
+                                            @Html.TextArea("PD_Current_Resolution_Plan", null, new { @class = "form-control", @rows = "3", @placeholder = "Your Comments ...", @style = "resize: none;" })
+                                            @Html.ValidationMessageFor(model => model.PD_Current_Resolution_Plan, "", new { @class = "text-danger" })
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <label>Modules (Product Dev)</label>
+
+                                            @Html.DropDownList("Modules", null, htmlAttributes: new { @class = "form-control app-modules", @name = "moduleProduct", @multiple = "multiple", id = "moduleProduct" })
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <div class="box box-warning container">
+
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Modules Accessibility</h3>
+                            </div>
+
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <label>Modules Accessed</label>
+
+                                            @Html.DropDownList("Modules", null, htmlAttributes: new { @class = "form-control app-modules", @name = "moduleAccessed", @multiple = "multiple", id = "moduleAccessed" })
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <label>Modules not Accessed</label>
+
+                                            @Html.DropDownList("Modules", null, htmlAttributes: new { @class = "form-control app-modules", @name = "moduleNotAccessed", @multiple = "multiple", id = "moduleNotAccessed" })
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <a class="btn btn-social-icon btn-dropbox"><i class="fa fa-arrow-circle-left" title="Back to List"></i></a>
+                    <div class="col-md-2">
+                        <button type="submit" formmethod="post" class="btn btn-block btn-primary">Submit Profiling</button>
+                    </div>
+                </div>
+        }
+
+        @*<div>
+                @Html.ActionLink("Back to List", "Index")
+            </div>*@
+
+    </section>
+</div>
+
